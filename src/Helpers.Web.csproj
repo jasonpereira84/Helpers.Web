@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+
+    <TargetFrameworks>netcoreapp2.1;netcoreapp2.2;netcoreapp3.1</TargetFrameworks>
+    <Configuration>'$(Configuration)'</Configuration>
+    <FileVersion>1.0.0.0</FileVersion>
+    <OutputType>Library</OutputType>
+
+    <ProjectGuid>{68656C70-7765-6200-0000-000000737263}</ProjectGuid>
+    <RootNamespace>JasonPereira84.Helpers</RootNamespace>
+    <AssemblyName>JasonPereira84.Helpers.Web</AssemblyName>
+    <AssemblyTitle>JasonPereira84's web helpers library</AssemblyTitle>
+    <Description>Web-centric helper methods, properties, objects etc.</Description>
+
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <PackageId>JasonPereira84.Helpers.Web</PackageId>
+    <Title>JasonPereira84's web. helpers library</Title>
+    <PackageDescription>Web-centric helper methods, properties, objects etc.</PackageDescription>
+    <PackageTags>C#, Library, Utils, Helpers, Web</PackageTags>
+    <Authors>jasonpereira84@gmail.com</Authors>
+    <Version>2.0.0</Version>
+
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants />
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.8" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.8" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="3.1.8" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="3.1.8" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
+    <PackageReference Include="JasonPereira84.Helpers.Configuration" Version="2.0.0" />
+    <PackageReference Include="JasonPereira84.Helpers.Misc" Version="2.0.2" />
+  </ItemGroup>
+
+</Project>
