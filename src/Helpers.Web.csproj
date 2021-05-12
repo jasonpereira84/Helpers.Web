@@ -45,8 +45,8 @@
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="3.1.8" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="3.1.8" />
     <PackageReference Include="Serilog" Version="2.10.0" />
-    <PackageReference Include="JasonPereira84.Helpers.Configuration" Version="2.0.0" />
-    <PackageReference Include="JasonPereira84.Helpers.Misc" Version="2.0.2" />
+    <PackageReference Include="JasonPereira84.Helpers.Configuration" Version="2.0.1" />
+    <PackageReference Include="JasonPereira84.Helpers.Misc" Version="2.0.7" />
   </ItemGroup>
 
 </Project>
