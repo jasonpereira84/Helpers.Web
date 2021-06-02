@@ -13,15 +13,6 @@
     <AssemblyTitle>JasonPereira84's web helpers library</AssemblyTitle>
     <Description>Web-centric helper methods, properties, objects etc.</Description>
 
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <IncludeSymbols>true</IncludeSymbols>
-    <PackageId>JasonPereira84.Helpers.Web</PackageId>
-    <Title>JasonPereira84's web. helpers library</Title>
-    <PackageDescription>Web-centric helper methods, properties, objects etc.</PackageDescription>
-    <PackageTags>C#, Library, Utils, Helpers, Web</PackageTags>
-    <Authors>jasonpereira84@gmail.com</Authors>
-    <Version>2.0.0</Version>
-
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
