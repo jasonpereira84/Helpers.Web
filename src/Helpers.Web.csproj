@@ -21,7 +21,7 @@
     <PackageDescription>Web-centric helper methods, properties, objects etc.</PackageDescription>
     <PackageTags>C#, Library, Utils, Helpers, Web</PackageTags>
     <Authors>jasonpereira84@gmail.com</Authors>
-    <Version>2.0.3</Version>
+    <Version>2.0.4</Version>
 
   </PropertyGroup>
 
