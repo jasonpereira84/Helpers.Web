@@ -16,7 +16,8 @@ namespace JasonPereira84.Helpers
         protected _ServiceContext(String type, String serializer, TData data)
         {
             Type = type.IsSane(out String resultType) ?? throw new ArgumentOutOfRangeException($"'{nameof(IServiceContext<TData>.Type)}' CANNOT-BE-{resultType}");
-            Serializer = type.IsSane(out String resultSerializer) ?? throw new ArgumentOutOfRangeException($"'{nameof(IServiceContext<TData>.Serializer)}' CANNOT-BE-{resultSerializer}");
+            Serializer = serializer.IsSane(out String resultSerializer) ?? throw new ArgumentOutOfRangeException($"'{nameof(IServiceContext<TData>.Serializer)}' CANNOT-BE-{resultSerializer}");
+            Data = data;
         }
 
         public String Type { get; protected set; }
@@ -24,16 +25,6 @@ namespace JasonPereira84.Helpers
         public String Serializer { get; protected set; }
 
         public TData Data { get; protected set; }
-    }
-
-    public sealed class ServiceContext : _ServiceContext<String>
-    {
-        public ServiceContext(String type, String data)
-            : base(type, "NONE", data) 
-        { }
-
-        public static ServiceContext From(String type, String data)
-            => new ServiceContext(type, data);
     }
 
 }
