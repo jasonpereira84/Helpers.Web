@@ -15,6 +15,7 @@
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>true</IncludeSymbols>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <PackageId>JasonPereira84.Helpers.Web</PackageId>
     <Title>JasonPereira84's web. helpers library</Title>
     <PackageDescription>Web-centric helper methods, properties, objects etc.</PackageDescription>
@@ -47,6 +48,10 @@
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="JasonPereira84.Helpers.Configuration" Version="2.0.1" />
     <PackageReference Include="JasonPereira84.Helpers.Misc" Version="2.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md" Pack="true" PackagePath="LICENSE.md"/>
   </ItemGroup>
 
 </Project>
