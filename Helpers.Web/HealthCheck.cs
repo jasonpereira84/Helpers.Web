@@ -16,11 +16,14 @@ namespace JasonPereira84.Helpers
 
     public class HealthCheck : IHealthCheck
     {
+        public Func<HealthCheckContext, Task<HealthCheckResult>> CheckHealthFunc { get; protected set; }
+
         public HealthCheck(Func<HealthCheckContext, Task<HealthCheckResult>> func)
-        { CheckHealthFunc = func; }
+         => CheckHealthFunc = func;
 
         public HealthCheck(Func<HealthCheckRegistration, Task<HealthCheckResult>> func)
-            : this(context => func.Invoke(context.Registration)) { }
+            : this(context => func.Invoke(context.Registration)) 
+        { }
 
         public HealthCheck(Task<HealthCheckResult> task)
             : this(new Func<HealthCheckContext, Task<HealthCheckResult>>(context => task))
@@ -30,7 +33,6 @@ namespace JasonPereira84.Helpers
             : this(Task.FromResult(healthCheckResult))
         { }
 
-        public Func<HealthCheckContext, Task<HealthCheckResult>> CheckHealthFunc { get; protected set; }
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default(CancellationToken))
             => CheckHealthFunc.Invoke(context);
@@ -123,15 +125,6 @@ namespace JasonPereira84.Helpers
                     resultStatusCodes);
             }
         }
-
-        public static class Result
-        {
-            public static HealthCheckResult From(HealthStatus status, IReadOnlyDictionary<String, Object> data, String description = default(String), Exception exception = default(Exception))
-                => new HealthCheckResult(status, description, exception, data ?? throw new ArgumentNullException(nameof(data)));
-            public static HealthCheckResult From(IReadOnlyDictionary<String, Object> data, String description = default(String), Exception exception = default(Exception))
-                => From(HealthStatus.Healthy, data, description, exception);
-        }
-
     }
 
 }
