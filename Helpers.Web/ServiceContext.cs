@@ -15,8 +15,8 @@ namespace JasonPereira84.Helpers
     {
         protected _ServiceContext(String type, String serializer, TData data)
         {
-            Type = type.IsSane(out String resultType) ?? throw new ArgumentOutOfRangeException($"'{nameof(IServiceContext<TData>.Type)}' CANNOT-BE-{resultType}");
-            Serializer = serializer.IsSane(out String resultSerializer) ?? throw new ArgumentOutOfRangeException($"'{nameof(IServiceContext<TData>.Serializer)}' CANNOT-BE-{resultSerializer}");
+            Type = type.IsSane(out String saneType) ? saneType : throw new ArgumentOutOfRangeException($"'{nameof(IServiceContext<TData>.Type)}' CANNOT-BE-{saneType}");
+            Serializer = serializer.IsSane(out String saneSerializer) ? saneSerializer : throw new ArgumentOutOfRangeException($"'{nameof(IServiceContext<TData>.Serializer)}' CANNOT-BE-{saneSerializer}");
             Data = data;
         }
 

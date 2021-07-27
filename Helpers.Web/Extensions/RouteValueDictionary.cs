@@ -14,9 +14,9 @@ namespace JasonPereira84.Helpers
                     return defaultValue;
 
                 if (routeValueDictionary
-                    .ReallyTryGetValueOrDefault(key, out String value,
-                    obj => Misc.SanitizeTo(obj?.ToString() ?? default(String), defaultValue)))
-                    return value;
+                    .ReallyTryGetValueOrDefault(key, out String saneValue,
+                        obj => Misc.SanitizeTo(obj?.ToString() ?? default(String), defaultValue)))
+                    return saneValue;
 
                 return defaultValue;
             }

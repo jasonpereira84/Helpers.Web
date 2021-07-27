@@ -52,7 +52,7 @@ namespace JasonPereira84.Helpers
                 IEnumerable<JProperty> _getJProperties()
                 {
                     var jProperties = new List<JProperty> { new JProperty(nameof(status), $"{status}") };
-                    if (description.EvaluateSanity(out description)) { jProperties.Add(new JProperty(nameof(description), description)); }
+                    if (description.IsSane(out description)) { jProperties.Add(new JProperty(nameof(description), description)); }
                     if (data.IsNotNullOrNone()) { jProperties.Add(new JProperty(nameof(data), new JObject(data.Select(pair => new JProperty(pair.Key, pair.Value))))); }
                     return jProperties;
                 }
