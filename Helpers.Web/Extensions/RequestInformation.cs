@@ -27,10 +27,9 @@ namespace JasonPereira84.Helpers
 
             public static String IfSane<TRequestInformation>(this TRequestInformation requestInformation, Func<String, String> messageGenerator)
                 where TRequestInformation : _RequestInformation
-                => (requestInformation?.Id)
-                        .EvaluateSanity(out String requestId)
-                        .IsFalse() ? String.Empty
-                            : messageGenerator?.Invoke(requestId) ?? requestId;
+                => (requestInformation?.Id).IsSane(out String requestId)
+                    ? messageGenerator?.Invoke(requestId) ?? requestId
+                    : String.Empty;
         }
     }
 }

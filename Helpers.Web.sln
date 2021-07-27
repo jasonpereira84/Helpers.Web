@@ -3,12 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers.Web", "src\Helpers.Web.csproj", "{68656C70-7765-6200-0000-000000737263}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers.Web", "Helpers.Web\Helpers.Web.csproj", "{68656C70-7765-6200-0000-000000737263}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{537ACCD1-022B-4AFF-BE23-E5E7ACFAA1F4}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers.We.Tests", "Helpers.We.Tests\Helpers.We.Tests.csproj", "{EF08BDD9-28F4-4455-9334-207ABF3EE930}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +22,10 @@ Global
 		{68656C70-7765-6200-0000-000000737263}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68656C70-7765-6200-0000-000000737263}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68656C70-7765-6200-0000-000000737263}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF08BDD9-28F4-4455-9334-207ABF3EE930}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF08BDD9-28F4-4455-9334-207ABF3EE930}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF08BDD9-28F4-4455-9334-207ABF3EE930}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF08BDD9-28F4-4455-9334-207ABF3EE930}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
