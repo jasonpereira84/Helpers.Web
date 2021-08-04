@@ -65,6 +65,12 @@ namespace JasonPereira84.Helpers
             public static IDictionary GetProperties_UserSecrets(this WebHostBuilderContext webHostBuilderContext, String delimiter = ":", DateParseHandling dateParseHandling = DateParseHandling.None, Boolean optional = true)
                 => Json.UserSecrets.GetProperties(GetAssembly(webHostBuilderContext), delimiter, dateParseHandling, optional);
 
+            public static WebHostBuilderContext GetWebHostBuilderContext(this IWebHostBuilder webHostBuilder)
+            {
+                _ = Build(webHostBuilder, out _, out WebHostBuilderContext webHostBuilderContext);
+                return webHostBuilderContext;
+            }
+
         }
     }
 }
