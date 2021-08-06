@@ -35,7 +35,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="5.0.8" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="5.0.8" />
-    <PackageReference Include="JasonPereira84.Helpers.Configuration" Version="3.0.1" />
+    <PackageReference Include="JasonPereira84.Helpers.Configuration" Version="3.0.2" />
     <PackageReference Include="JasonPereira84.Helpers.Misc" Version="3.0.2" />
   </ItemGroup>
 
