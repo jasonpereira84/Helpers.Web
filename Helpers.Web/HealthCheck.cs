@@ -125,6 +125,14 @@ namespace JasonPereira84.Helpers
                     resultStatusCodes);
             }
         }
+
+        public static class Result
+        {
+            public static HealthCheckResult From(HealthStatus status, IReadOnlyDictionary<String, Object> data, String description = default(String), Exception exception = default(Exception))
+                => new HealthCheckResult(status, description, exception, data ?? throw new ArgumentNullException(nameof(data)));
+            public static HealthCheckResult From(IReadOnlyDictionary<String, Object> data, String description = default(String), Exception exception = default(Exception))
+                => From(HealthStatus.Healthy, data, description, exception);
+        }
     }
 
 }
