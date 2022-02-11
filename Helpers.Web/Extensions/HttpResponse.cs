@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace JasonPereira84.Helpers
 {
@@ -17,59 +16,29 @@ namespace JasonPereira84.Helpers
 
         public static partial class Web
         {
-            public static Task WriteAsync(this HttpResponse httpResponse, AjaxResult jsonResult, Encoding encoding, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                httpResponse.ContentType = jsonResult.ContentType;
-                return HttpResponseWritingExtensions.WriteAsync(httpResponse, jsonResult.Data, encoding, cancellationToken);
-            }
-
-            public static Task WriteAsync(this HttpResponse httpResponse, AjaxResult jsonResult, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                httpResponse.ContentType = jsonResult.ContentType;
-                return HttpResponseWritingExtensions.WriteAsync(httpResponse, jsonResult.Data, cancellationToken);
-            }
-
-            public static Task WriteAsync(this HttpResponse httpResponse, AjaxResult jsonResult)
-            {
-                httpResponse.ContentType = jsonResult.ContentType;
-                return HttpResponseWritingExtensions.WriteAsync(httpResponse, jsonResult.Data);
-            }
-
             public static Task WriteAsync(this HttpResponse httpResponse, JObject jObject, Formatting formatting = Formatting.Indented)
-            {
-                httpResponse.ContentType = MimeTypes.Application.Json;
-                return HttpResponseWritingExtensions.WriteAsync(httpResponse, jObject.ToString(formatting));
-            }
+                => JsonResponseWriter.WriteAsync(httpResponse, jObject, formatting);
 
             public static Task WriteAsync(this HttpResponse httpResponse, IEnumerable<JProperty> jProperties, Formatting formatting = Formatting.Indented)
-                => WriteAsync(httpResponse, new JObject(content: jProperties.ToArray()), formatting);
+                => JsonResponseWriter.WriteAsync(httpResponse, jProperties, formatting);
 
             public static Task WriteAsync(this HttpResponse httpResponse, Formatting formatting = Formatting.Indented, params JProperty[] jProperties)
-                => WriteAsync(httpResponse, new JObject(content: jProperties), formatting);
+                => JsonResponseWriter.WriteAsync(httpResponse, formatting, jProperties);
 
-            public static Task WriteAsync(this HttpResponse httpResponse, HealthStatus status, String description, IReadOnlyDictionary<String, Object> data, Formatting formatting = Formatting.Indented)
-            {
-                IEnumerable<JProperty> _getJProperties()
-                {
-                    var jProperties = new List<JProperty> { new JProperty(nameof(status), $"{status}") };
-                    if (description.IsSane(out description)) { jProperties.Add(new JProperty(nameof(description), description)); }
-                    if (data.IsNotNullOrNone()) { jProperties.Add(new JProperty(nameof(data), new JObject(data.Select(pair => new JProperty(pair.Key, pair.Value))))); }
-                    return jProperties;
-                }
-                return WriteAsync(httpResponse, _getJProperties(), formatting);
-            }
+            //public static Task WriteAsync(this HttpResponse httpResponse, HealthStatus healthStatus, String description, IReadOnlyDictionary<String, Object> data, Formatting formatting = Formatting.Indented)
+            //    => JsonResponseWriter.WriteAsync(httpResponse, healthStatus, description, data, formatting);
 
-            public static Task WriteAsync(this HttpResponse httpResponse, HealthReportEntry healthReportEntry, Formatting formatting = Formatting.Indented)
-                => WriteAsync(httpResponse, healthReportEntry.Status, healthReportEntry.Description, healthReportEntry.Data, formatting);
+            //public static Task WriteAsync(this HttpResponse httpResponse, HealthReportEntry healthReportEntry, Formatting formatting = Formatting.Indented)
+            //    => JsonResponseWriter.WriteAsync(httpResponse, healthReportEntry, formatting);
 
-            public static Task WriteAsync(this HttpResponse httpResponse, HealthReport healthReport, Func<HealthReport, HealthReportEntry> healthReportEntryGetter, Formatting formatting = Formatting.Indented)
-                => WriteAsync(httpResponse, healthReportEntryGetter.Invoke(healthReport), formatting);
+            //public static Task WriteAsync(this HttpResponse httpResponse, HealthReport healthReport, Func<HealthReport, HealthReportEntry> healthReportEntryGetter, Formatting formatting = Formatting.Indented)
+            //    => JsonResponseWriter.WriteAsync(httpResponse, healthReport, healthReportEntryGetter);
 
-            public static Task WriteAsync(this HttpResponse httpResponse, HealthReport healthReport, String key, Formatting formatting = Formatting.Indented)
-                => WriteAsync(httpResponse, healthReport, hr => hr.Entries.First(pair => pair.Key.Matches(key)).Value, formatting);
+            //public static Task WriteAsync(this HttpResponse httpResponse, HealthReport healthReport, String key, Formatting formatting = Formatting.Indented)
+            //    => JsonResponseWriter.WriteAsync(httpResponse, healthReport, key, formatting);
 
-            public static Task WriteAsync(this HttpResponse httpResponse, HealthReport healthReport, Formatting formatting = Formatting.Indented)
-                => WriteAsync(httpResponse, healthReport, hr => hr.Entries.First().Value, formatting);
+            //public static Task WriteAsync(this HttpResponse httpResponse, HealthReport healthReport, Formatting formatting = Formatting.Indented)
+            //    => JsonResponseWriter.WriteAsync(httpResponse, healthReport, formatting);
         }
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Net;
-using System.Web;
-using System.Text;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace JasonPereira84.Helpers
@@ -15,6 +11,7 @@ namespace JasonPereira84.Helpers
         {
             public static SelectList AsSelectList<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> pairs)
                 => new SelectList(pairs, "Key", "Value");
+
             public static SelectList AsSelectList<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> pairs, TKey selectedValue)
                 => new SelectList(pairs, "Key", "Value", selectedValue);
 

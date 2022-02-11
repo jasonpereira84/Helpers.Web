@@ -10,13 +10,11 @@ namespace JasonPereira84.Helpers
         {
             public static String GetValue(this RouteValueDictionary routeValueDictionary, String key, String defaultValue = default(String))
             {
-                if (routeValueDictionary.IsNullOrNone())
+                if (routeValueDictionary.None())
                     return defaultValue;
 
-                if (routeValueDictionary
-                    .ReallyTryGetValueOrDefault(key, out String saneValue,
-                        obj => Misc.SanitizeTo(obj?.ToString() ?? default(String), defaultValue)))
-                    return saneValue;
+                if (routeValueDictionary.ReallyTryGetValueOrDefault(key, out Object obj))
+                    return (obj?.ToString() ?? default(String)).SanitizeTo(defaultValue);
 
                 return defaultValue;
             }

@@ -4,7 +4,15 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <RootNamespace>JasonPereira84.Helpers.Web.Tests</RootNamespace>
+    <AssemblyName>JasonPereira84.Helpers.Web.Tests</AssemblyName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Extensions\IConfigurationRoot.cs" />
+    <Compile Remove="If.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
@@ -14,6 +22,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Helpers.Web\Helpers.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>

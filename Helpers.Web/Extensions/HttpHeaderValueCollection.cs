@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Net;
-using System.Web;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Collections.Generic;
 
 namespace JasonPereira84.Helpers
 {
@@ -23,10 +19,9 @@ namespace JasonPereira84.Helpers
             //NOTE: Even though 'Authentication' is the correct definition of what is happening, this creates an 'Authorizarion' header
             public static void Add(this HttpHeaderValueCollection<AuthenticationHeaderValue> authenticationHeaders, String scheme, String parameter)
                 => authenticationHeaders.Add(new AuthenticationHeaderValue(scheme, parameter));
+
             public static void Add(this HttpHeaderValueCollection<AuthenticationHeaderValue> authenticationHeaders, String scheme)
                 => authenticationHeaders.Add(new AuthenticationHeaderValue(scheme));
-
-
         }
     }
 }

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace JasonPereira84.Helpers
 {
     using Newtonsoft.Json;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Session;
     using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
     using JasonPereira84.Helpers.Extensions;
@@ -153,7 +151,7 @@ namespace JasonPereira84.Helpers
             [JsonProperty("icon")] public String Icon { get; set; }
             [JsonProperty("message")] public String Message { get; set; }
 
-            public String ToJson() => _json(this);
+            public String AsJson() => _json(this);
         }
 
         public struct settings
@@ -180,20 +178,21 @@ namespace JasonPereira84.Helpers
                         <a href=""{3}"" target=""{4}"" data-notify=""url""></a>
                     </div>";
 
-
             public settings Sanitize()
             {
                 if (AllowDismiss.IsFalse())
                 {
-                    Ensure.That<ArgumentOutOfRangeException>(Delay > 0,
-                        $"{nameof(settings.Delay)} MUST-BE greater than zero (0) when {nameof(settings.AllowDismiss)} is '{false}'");
-
+                    if (Delay <= 0)
+                        throw new ArgumentOutOfRangeException(
+                            $"{nameof(settings)}.{nameof(settings.AllowDismiss)}",
+                            $"The value of '{nameof(settings)}.{nameof(settings.AllowDismiss)}' MUST-BE greater than zero (0) when {nameof(settings.AllowDismiss)} is 'false'.");
+                    
                     MouseOver = MouseOverEnum.pause;
                 }
                 return this;
             }
 
-            public String ToJson() => _json(this);
+            public String AsJson() => _json(this);
         }
 
         public class DecoratorResult<TActionResult> : IActionResult
@@ -210,8 +209,25 @@ namespace JasonPereira84.Helpers
 
             public async Task ExecuteResultAsync(ActionContext actionContext)
             {
-                if (actionContext.GetTempData(out ITempDataDictionary tempData))
-                    Web.AddIfNewOrUpdate(tempData, $"{typeof(Notification).FullName}", Notification.Jsons());
+                if (actionContext.HttpContext == null)
+                    throw new ArgumentNullException($"{nameof(actionContext)}.{nameof(actionContext.HttpContext)}");
+
+                var tempDataDictionaryFactory = actionContext
+                    .HttpContext
+                    .RequestServices
+                    .GetService(typeof(ITempDataDictionaryFactory)) as ITempDataDictionaryFactory;
+                if (tempDataDictionaryFactory == null)
+                    throw new ArgumentNullException($"{nameof(actionContext)}.{nameof(ITempDataDictionaryFactory)}");
+
+                var tempDataDictionary = tempDataDictionaryFactory.GetTempData(actionContext.HttpContext);
+                if (tempDataDictionary == null)
+                    throw new ArgumentNullException($"{nameof(actionContext)}.{nameof(ITempDataDictionary)}");
+
+                var key = $"{typeof(Notification).FullName}";
+                if (tempDataDictionary.NotContainsKey(key))
+                    tempDataDictionary.Add(key, Notification.Jsons());
+                else
+                    tempDataDictionary[key] = Notification.Jsons();
 
                 await Result.ExecuteResultAsync(actionContext);
             }
@@ -223,9 +239,9 @@ namespace JasonPereira84.Helpers
         [JsonProperty("Settings")]
         public settings Settings { get; }
 
-        public String Jsons() => $"{Options.ToJson()}, {Settings.ToJson()}";
+        public String Jsons() => $"{Options.AsJson()}, {Settings.AsJson()}";
 
-        public String ToJson() => _json(this);
+        public String AsJson() => _json(this);
 
         public Notification(options options, settings? settings = null)
         {

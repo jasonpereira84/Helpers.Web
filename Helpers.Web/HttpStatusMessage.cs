@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Net;
-using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace JasonPereira84.Helpers
 {
-    using JasonPereira84.Helpers.Extensions;
-
     public sealed class HttpStatusMessage
     {
         private class Nested

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 namespace JasonPereira84.Helpers
 {
+    using Misc = Extensions.Misc;
+
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
@@ -49,20 +51,36 @@ namespace JasonPereira84.Helpers
             => JsonConvert.SerializeObject(this);
     }
 
-    public sealed class MvcRequestInformation : _RequestInformation
+    public sealed class ControllerActionRequestInformation : _RequestInformation
     {
         public String Controller { get; set; }
 
         public String Action { get; set; }
 
-        public MvcRequestInformation(ControllerContext controllerContext)
+        public ControllerActionRequestInformation(ControllerContext controllerContext)
             : base(controllerContext?.HttpContext?.Request)
         {
-            Controller = Extensions.Web.GetController(controllerContext?.RouteData?.Values);
-            Action = Extensions.Web.GetAction(controllerContext?.RouteData?.Values);
+            var routeValueDictionary = controllerContext?.RouteData?.Values ?? default(IDictionary<String, Object>);
+            if (routeValueDictionary != null && routeValueDictionary.Any()) 
+            {
+                String _getValue(String key)
+                {
+                    if (Misc.ReallyTryGetValueOrDefault(routeValueDictionary, key, out Object obj))
+                    {
+                        return Misc.IfNotNullOrEmptyOrWhiteSpace(
+                            obj?.ToString() ?? default(String),
+                            value => value.Trim());
+                    }
+
+                    return default(String);
+                }
+
+                Controller = _getValue("Controller");
+                Action = _getValue("Action");
+            }
         }
 
-        public MvcRequestInformation(ControllerBase controllerBase)
+        public ControllerActionRequestInformation(ControllerBase controllerBase)
             : this(controllerBase.ControllerContext) { }
 
         public override String ToString()

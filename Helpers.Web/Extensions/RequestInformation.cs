@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace JasonPereira84.Helpers
 {
@@ -16,18 +14,18 @@ namespace JasonPereira84.Helpers
             public static RequestInformation GetInformation(this HttpRequest httpRequest, out RequestInformation requestInformation)
                 => requestInformation = new RequestInformation(httpRequest);
 
-            public static MvcRequestInformation GetInformation(this ControllerContext controllerContext, out MvcRequestInformation requestInformation)
-                => requestInformation = new MvcRequestInformation(controllerContext);
+            public static ControllerActionRequestInformation GetInformation(this ControllerContext controllerContext, out ControllerActionRequestInformation requestInformation)
+                => requestInformation = new ControllerActionRequestInformation(controllerContext);
 
-            public static MvcRequestInformation GetInformation(this ControllerBase controllerBase, out MvcRequestInformation requestInformation)
-                => requestInformation = new MvcRequestInformation(controllerBase);
+            public static ControllerActionRequestInformation GetInformation(this ControllerBase controllerBase, out ControllerActionRequestInformation requestInformation)
+                => requestInformation = new ControllerActionRequestInformation(controllerBase);
 
             public static RequestInformation GetInformation(this PageModel pageModel, out RequestInformation requestInformation)
                 => requestInformation = new RequestInformation(pageModel.Request);
 
             public static String IfSane<TRequestInformation>(this TRequestInformation requestInformation, Func<String, String> messageGenerator)
                 where TRequestInformation : _RequestInformation
-                => (requestInformation?.Id).IsSane(out String requestId)
+                => Misc.EvaluateSanity(requestInformation?.Id, out String requestId)
                     ? messageGenerator?.Invoke(requestId) ?? requestId
                     : String.Empty;
         }

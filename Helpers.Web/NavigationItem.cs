@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace JasonPereira84.Helpers
 {
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
-
-    using Newtonsoft.Json;
 
     using JasonPereira84.Helpers.Extensions;
 
@@ -69,17 +64,18 @@ namespace JasonPereira84.Helpers
         public static MvcNavigationItem From(String text, String controller, String action = "Index", String @class = default(String), Boolean isActive = default(Boolean))
             => new MvcNavigationItem(text, controller, action, @class, isActive);
 
-        public static MvcNavigationItem From(String text, String controller, String action, MvcRequestInformation requestInformation, String @class = default(String))
-            => new MvcNavigationItem(text, controller, action, @class)
-                .Do(item =>
-                {
-                    item.IsActive = requestInformation.Controller.IsNotNullOrEmptyOrWhiteSpace() && requestInformation.Action.IsNotNullOrEmptyOrWhiteSpace()
-                        && item.Controller.IsNotNullOrEmptyOrWhiteSpace() && item.Controller.Matches(requestInformation.Controller)
-                        && item.Action.IsNotNullOrEmptyOrWhiteSpace() && item.Action.Matches(requestInformation.Action);
-                })
-                .If(item => item.IsActive,
-                    item => { item.Class = item.Class + " active"; return item; });
-        public static MvcNavigationItem From(String text, String controller, MvcRequestInformation requestInformation, String @class = default(String))
+        public static MvcNavigationItem From(String text, String controller, String action, ControllerActionRequestInformation requestInformation, String @class = default(String))
+        {
+            var retVal = new MvcNavigationItem(text, controller, action, @class);
+            retVal.IsActive = requestInformation.Controller.IsNotNullOrEmptyOrWhiteSpace() && requestInformation.Action.IsNotNullOrEmptyOrWhiteSpace()
+                && retVal.Controller.IsNotNullOrEmptyOrWhiteSpace() && retVal.Controller.Matches(requestInformation.Controller)
+                && retVal.Action.IsNotNullOrEmptyOrWhiteSpace() && retVal.Action.Matches(requestInformation.Action);
+            if (retVal.IsActive)
+                retVal.Class += " active";
+            return retVal;
+        }
+        
+        public static MvcNavigationItem From(String text, String controller, ControllerActionRequestInformation requestInformation, String @class = default(String))
             => From(text, controller, "Index", requestInformation, @class);
     }
 }

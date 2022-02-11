@@ -13,7 +13,7 @@ namespace JasonPereira84.Helpers
             public static Dictionary<String, String[]> Errors(this ModelStateDictionary modelState)
                 => modelState
                     .Where(
-                        item => item.Value.Errors.IsNotNullOrNone())
+                        item => item.Value.Errors != null && item.Value.Errors.Any())
                     .ToDictionary(
                         item => item.Key, 
                         item => item.Value.Errors.Select(err => err.ErrorMessage).ToArray());
