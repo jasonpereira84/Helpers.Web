@@ -12,9 +12,6 @@ namespace JasonPereira84.Helpers
 
     public class Notification
     {
-        private static String _json<T>(T t)
-            => JsonConvert.SerializeObject(t, new Newtonsoft.Json.Converters.StringEnumConverter());
-
         [DefaultValue(warning)]
         public enum TypeEnum
         {
@@ -151,7 +148,8 @@ namespace JasonPereira84.Helpers
             [JsonProperty("icon")] public String Icon { get; set; }
             [JsonProperty("message")] public String Message { get; set; }
 
-            public String AsJson() => _json(this);
+            public String AsJson()
+                => JsonConvert.SerializeObject(this, new Newtonsoft.Json.Converters.StringEnumConverter());
         }
 
         public struct settings
@@ -182,7 +180,7 @@ namespace JasonPereira84.Helpers
             {
                 if (AllowDismiss.IsFalse())
                 {
-                    if (Delay <= 0)
+                    if (Delay == 0)
                         throw new ArgumentOutOfRangeException(
                             $"{nameof(settings)}.{nameof(settings.AllowDismiss)}",
                             $"The value of '{nameof(settings)}.{nameof(settings.AllowDismiss)}' MUST-BE greater than zero (0) when {nameof(settings.AllowDismiss)} is 'false'.");
@@ -192,23 +190,28 @@ namespace JasonPereira84.Helpers
                 return this;
             }
 
-            public String AsJson() => _json(this);
+            public String AsJson()
+                => JsonConvert.SerializeObject(this, new Newtonsoft.Json.Converters.StringEnumConverter());
         }
 
         public class DecoratorResult<TActionResult> : IActionResult
             where TActionResult : IActionResult
         {
-            public TActionResult Result { get; }
-            public Notification Notification { get; }
+            public TActionResult Result { get; private set; }
+
+            public Notification Notification { get; private set; }
 
             public DecoratorResult(TActionResult result, Notification notification)
             {
-                Result = result;
-                Notification = notification;
+                Result = result ?? throw new ArgumentNullException(nameof(result));
+                Notification = notification ?? throw new ArgumentNullException(nameof(notification));
             }
 
             public async Task ExecuteResultAsync(ActionContext actionContext)
             {
+                if (actionContext == null)
+                    throw new ArgumentNullException(nameof(actionContext));
+
                 if (actionContext.HttpContext == null)
                     throw new ArgumentNullException($"{nameof(actionContext)}.{nameof(actionContext.HttpContext)}");
 
@@ -234,19 +237,21 @@ namespace JasonPereira84.Helpers
         }
 
         [JsonProperty("Options")]
-        public options Options { get; }
+        public options Options { get; private set; }
 
         [JsonProperty("Settings")]
-        public settings Settings { get; }
+        public settings Settings { get; private set; }
 
-        public String Jsons() => $"{Options.AsJson()}, {Settings.AsJson()}";
+        public String Jsons() 
+            => $"{Options.AsJson()}, {Settings.AsJson()}";
 
-        public String AsJson() => _json(this);
+        public String AsJson()
+                => JsonConvert.SerializeObject(this, new Newtonsoft.Json.Converters.StringEnumConverter());
 
         public Notification(options options, settings? settings = null)
         {
             Options = options;
-            Settings = settings?.Sanitize() ?? new settings() { AllowDismiss = true, Delay = 0 };
+            Settings = settings?.Sanitize() ?? new settings { AllowDismiss = true };
         }
 
         public static Notification Error(String message)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace JasonPereira84.Helpers
 {
@@ -8,17 +9,34 @@ namespace JasonPereira84.Helpers
 
         public static partial class Web
         {
-            public static String GetTitle<TViewDataDictionary>(this TViewDataDictionary viewDataDictionary, String prefix, String titleFormatIfTrue = "{0} - {1}", String titleFormatIfFalse = "{0}")
-                where TViewDataDictionary : ViewDataDictionary
+            internal static Boolean reallyTryGetTitle(IDictionary<String, Object> dictionary, out String title)
             {
-                if (!Misc.ReallyTryGetValueOrDefault(viewDataDictionary, "Title", out Object obj))
-                    return String.Format(titleFormatIfFalse, prefix, "NULL");
+                if (dictionary == null || dictionary.ReallyTryGetValue("Title", out Object @object).IsFalse())
+                {
+                    title = "NULL";
+                    return false;
+                }
 
-                if(!Misc.EvaluateSanity(obj as String ?? default(String), out String saneValue))
-                    return String.Format(titleFormatIfFalse, prefix, saneValue);
-
-                return String.Format(titleFormatIfTrue, prefix, saneValue);
+                return (@object as String).EvaluateSanity(out title);
             }
+            public static Boolean ReallyTryGetTitle<TViewDataDictionary>(this TViewDataDictionary viewDataDictionary, out String title)
+                where TViewDataDictionary : ViewDataDictionary
+                => reallyTryGetTitle(viewDataDictionary, out title);
+
+            internal static String titleFrom(IDictionary<String, Object> dictionary, String prefix,
+                String titleFormatIfTrue, 
+                String titleFormatIfFalse)
+                => String.Format(
+                    reallyTryGetTitle(dictionary, out String title) 
+                        ? titleFormatIfTrue ?? "{0} - {1}"
+                        : titleFormatIfFalse ?? "{0}",
+                    prefix,
+                    title);
+            public static String TitleFrom<TViewDataDictionary>(this TViewDataDictionary viewDataDictionary, String prefix,
+                String titleFormatIfTrue = "{0} - {1}",
+                String titleFormatIfFalse = "{0}")
+                where TViewDataDictionary : ViewDataDictionary
+                => titleFrom(viewDataDictionary, prefix, titleFormatIfTrue, titleFormatIfFalse);
         }
     }
 }

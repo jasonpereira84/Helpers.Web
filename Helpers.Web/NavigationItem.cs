@@ -16,7 +16,7 @@ namespace JasonPereira84.Helpers
 
         protected _NavigationItem(String text, String @class, Boolean isActive)
         {
-            Text = text;
+            Text = text ?? throw new ArgumentNullException(nameof(text));
             Class = @class;
             IsActive = isActive;
         }
@@ -24,58 +24,35 @@ namespace JasonPereira84.Helpers
 
     public class NavigationItem : _NavigationItem
     {
-        public NavigationItem(String text, PathString href, String @class = default(String), Boolean isActive = default(Boolean))
-            : base(text, @class.Sanitize(), isActive)
-            => Href = href;
-
         public PathString Href { get; protected set; }
 
-        public NavigationItem ActivateIfMatches(String @string)
+        internal NavigationItem(String text, String @class, Boolean isActive, PathString href)
+            : base(text, @class, isActive)
+            => Href = href;
+
+        public NavigationItem(String text, PathString href, String @class = default(String), Boolean isActive = default(Boolean))
+            : this(text, @class.SanitizeTo(default(String)), isActive, href) 
+        { }
+
+        public NavigationItem SetIsActiveIfMatches(String @string)
         {
-            IsActive = Href.Value.IsNotNullOrEmptyOrWhiteSpace() && Href.Value.Matches(@string);
+            IsActive = Href.HasValue && 
+                Href.Value.IsNotNullOrEmptyOrWhiteSpace() && 
+                Href.Value.Matches(@string);
+
+            if (IsActive)
+                Class = Class.IsNull()
+                    ? "active" :
+                    $"{Class} active";
+
             return this;
         }
 
-        public NavigationItem ActivateIfMatches(PathString pathString)
-        {
-            if (pathString.Value.IsNullOrEmptyOrWhiteSpace())
-                return this;
-
-            return ActivateIfMatches(pathString.Value);
-        }
+        public NavigationItem SetIsActiveIfMatches(PathString pathString)
+            => SetIsActiveIfMatches(pathString.Value ?? default(String));
 
         public static NavigationItem From(String text, PathString href, String @class = default(String), Boolean isActive = default(Boolean))
             => new NavigationItem(text, href, @class, isActive);
     }
 
-    public class MvcNavigationItem : _NavigationItem
-    {
-        public MvcNavigationItem(String text, String controller, String action = "Index", String @class = default(String), Boolean isActive = default(Boolean))
-            : base(text, @class.Sanitize(), isActive)
-        {
-            Controller = controller;
-            Action = action;
-        }
-
-        public String Controller { get; protected set; }
-
-        public String Action { get; protected set; }
-
-        public static MvcNavigationItem From(String text, String controller, String action = "Index", String @class = default(String), Boolean isActive = default(Boolean))
-            => new MvcNavigationItem(text, controller, action, @class, isActive);
-
-        public static MvcNavigationItem From(String text, String controller, String action, ControllerActionRequestInformation requestInformation, String @class = default(String))
-        {
-            var retVal = new MvcNavigationItem(text, controller, action, @class);
-            retVal.IsActive = requestInformation.Controller.IsNotNullOrEmptyOrWhiteSpace() && requestInformation.Action.IsNotNullOrEmptyOrWhiteSpace()
-                && retVal.Controller.IsNotNullOrEmptyOrWhiteSpace() && retVal.Controller.Matches(requestInformation.Controller)
-                && retVal.Action.IsNotNullOrEmptyOrWhiteSpace() && retVal.Action.Matches(requestInformation.Action);
-            if (retVal.IsActive)
-                retVal.Class += " active";
-            return retVal;
-        }
-        
-        public static MvcNavigationItem From(String text, String controller, ControllerActionRequestInformation requestInformation, String @class = default(String))
-            => From(text, controller, "Index", requestInformation, @class);
-    }
 }
