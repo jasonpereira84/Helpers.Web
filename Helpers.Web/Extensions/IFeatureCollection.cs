@@ -1,77 +1,69 @@
 ﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Collections;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace JasonPereira84.Helpers
 {
     namespace Extensions
     {
-        using Microsoft.AspNetCore.Http;
         using Microsoft.AspNetCore.Http.Features;
         using Microsoft.AspNetCore.Diagnostics;
 
         public static partial class Web
         {
-            public static Boolean TryGet<TFeature>(this IFeatureCollection featureCollection, Func<TFeature, Boolean> predicate, out TFeature feature, TFeature defaultValue = default(TFeature))
+            public static Boolean TryGet<TFeature>(this IFeatureCollection featureCollection, out TFeature feature)
             {
-                feature = defaultValue;
-                try { feature = featureCollection.Get<TFeature>(); return predicate.Invoke(feature); }
-                catch { return false; }
+                try 
+                { 
+                    feature = featureCollection.Get<TFeature>();
+                    return feature != null;
+                }
+                catch 
+                {
+                    feature = default(TFeature);
+                    return false; 
+                }
             }
 
-            public static Boolean TryGetException(this IFeatureCollection featureCollection, out Exception exception, Exception defaultValue)
+            public static Boolean TryGet<TFeature, TResult>(this IFeatureCollection featureCollection, Func<TFeature, TResult> getter, out TResult result) 
             {
-                exception = defaultValue;
+                getter = getter ?? throw new ArgumentNullException(nameof(getter));
+
+                if (TryGet(featureCollection, out TFeature feature).IsFalse())
+                {
+                    result = default(TResult);
+                    return false;
+                }
+
                 try
                 {
-                    var error = featureCollection.Get<IExceptionHandlerFeature>()?.Error;
-                    if (error == null)
-                        return false;
-
-                    exception = error;
+                    result = getter.Invoke(feature);
                     return true;
                 }
-                catch { return false; }
-            }
-
-            public static Boolean TryGetExceptionAndPath(this IFeatureCollection featureCollection, out (Exception Exception, String Path) feature, (Exception Exception, String Path) defaultValue)
-            {
-                feature = defaultValue;
-                try
+                catch
                 {
-                    var exceptionHandlerPathFeature = featureCollection.Get<IExceptionHandlerPathFeature>();
-
-                    var error = exceptionHandlerPathFeature?.Error;
-                    var path = exceptionHandlerPathFeature?.Path;
-                    if (error == null)
-                    {
-                        if (path != null)
-                            feature.Path = path;
-
-                        return false;
-                    }
-                    else
-                    {
-                        feature.Exception = error;
-
-                        if (path == null)
-                            return false;
-
-                        feature.Path = path;
-                        return true;
-                    }
+                    result = default(TResult);
+                    return false;
                 }
-                catch { return false; }
             }
 
             public static Boolean TryGetException(this IFeatureCollection featureCollection, out Exception exception)
-                => TryGetException(featureCollection, out exception, new Exception($"NULL {nameof(IExceptionHandlerFeature.Error)}"));
+                => TryGet<IExceptionHandlerFeature, Exception>(featureCollection, feature => feature.Error, out exception);
+            
+            public static Boolean TryGetExceptionAndPath(this IFeatureCollection featureCollection, out Exception exception, out String path)
+            {
+                if (TryGet(featureCollection, out IExceptionHandlerPathFeature feature) &&
+                    feature.Error != default(Exception) &&
+                    feature.Path.IsNotNullOrEmptyOrWhiteSpace())
+                {
+                    exception = feature.Error;
+                    path = feature.Path;
+                    return true;
+                }
 
-            public static Boolean TryGetExceptionAndPath(this IFeatureCollection featureCollection, out (Exception Exception, String Path) feature)
-                => TryGetExceptionAndPath(featureCollection, out feature, (Exception: new Exception($"NULL {nameof(IExceptionHandlerPathFeature.Error)}"), Path: $"NULL {nameof(IExceptionHandlerPathFeature.Error)}"));
+                exception = default(Exception);
+                path = default(String);
+                return false;
+            }
+
         }
     }
 }
