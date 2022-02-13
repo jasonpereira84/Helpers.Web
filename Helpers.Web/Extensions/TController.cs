@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Web;
-using System.Text;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace JasonPereira84.Helpers
 {

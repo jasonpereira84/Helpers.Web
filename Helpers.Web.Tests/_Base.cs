@@ -1,33 +1,43 @@
 using System;
+using System.Collections.Generic;
 
-namespace JasonPereira84.Helpers.UnitTests
+namespace JasonPereira84.Helpers.Web.Tests
 {
-    internal class Struct
+    internal class SomeClass : IEquatable<SomeClass>
     {
         public Int32 Value { get; set; }
 
-        public static Struct From(Int32 value)
-            => new Struct { Value = value };
-    }
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as SomeClass);
+        }
 
-    internal class Class
-    {
-        public Int32 Value { get; set; }
+        public bool Equals(SomeClass other)
+        {
+            if (other == null)
+                return false;
 
-        public static Class From(Int32 value)
-            => new Class { Value = value };
+            return Value == other.Value;
+        }
 
-    }
+        public override int GetHashCode()
+        {
+            var hash = new HashCode();
+            {
+                hash.Add(Value);
+            }
+            return hash.ToHashCode();
+        }
 
-    internal class SomeException : Exception
-    {
-        public SomeException() : base() { }
-        public SomeException(string message) : base(message) { }
-        public SomeException(string message, Exception innerException) : base(message, innerException) { }
-    }
+        public static bool operator ==(SomeClass left, SomeClass right)
+        {
+            return EqualityComparer<SomeClass>.Default.Equals(left, right);
+        }
 
-    internal class ExceptionWhileTesting : Exception
-    {
-        public ExceptionWhileTesting(string message) : base(message) { }
+        public static bool operator !=(SomeClass left, SomeClass right)
+        {
+            return !(left == right);
+        }
+
     }
 }
