@@ -2,6 +2,8 @@
 
 namespace JasonPereira84.Helpers
 {
+    using Misc = Extensions.Misc;
+
     public interface IServiceContext<TData>
     {
         String Type { get; }
@@ -13,18 +15,25 @@ namespace JasonPereira84.Helpers
 
     public abstract class _ServiceContext<TData> : IServiceContext<TData>
     {
-        protected _ServiceContext(String type, String serializer, TData data)
-        {
-            Type = type.IsSane(out String saneType) ? saneType : throw new ArgumentOutOfRangeException($"'{nameof(IServiceContext<TData>.Type)}' CANNOT-BE-{saneType}");
-            Serializer = serializer.IsSane(out String saneSerializer) ? saneSerializer : throw new ArgumentOutOfRangeException($"'{nameof(IServiceContext<TData>.Serializer)}' CANNOT-BE-{saneSerializer}");
-            Data = data;
-        }
-
         public String Type { get; protected set; }
 
         public String Serializer { get; protected set; }
 
         public TData Data { get; protected set; }
+
+        protected _ServiceContext(String type, String serializer, TData data)
+        {
+            if (!Misc.EvaluateSanity(type, out String saneType))
+                throw new ArgumentException($"The value of '{nameof(IServiceContext<TData>.Type)}' cannot be an empty string.", nameof(IServiceContext<TData>.Type));
+            Type = saneType;
+
+            if (!Misc.EvaluateSanity(serializer, out String saneSerializer))
+                throw new ArgumentException($"The value of '{nameof(IServiceContext<TData>.Serializer)}' cannot be an empty string.", nameof(IServiceContext<TData>.Serializer));
+            Serializer = saneSerializer;
+
+            Data = data;
+        }
+
     }
 
 }

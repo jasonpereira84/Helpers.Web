@@ -9,11 +9,8 @@ namespace JasonPereira84.Helpers
             public static Boolean IsBuildConfiguration(this CompilationProperties compilationProperties, String configurationName, Boolean ignoreCase = false)
                 => String.Compare(compilationProperties.BUILD_CONFIGURATION, configurationName, ignoreCase).Equals(0);
 
-            public static Boolean IsReleaseBuild(this CompilationProperties compilationProperties, Boolean ignoreCase = false)
-                => IsBuildConfiguration(compilationProperties, "Release", ignoreCase);
-
-            public static Boolean IsDebugBuild(this CompilationProperties compilationProperties, Boolean ignoreCase = false)
-                => IsBuildConfiguration(compilationProperties, "Debug", ignoreCase);
+            public static Boolean IsBuildConfiguration(this CompilationProperties compilationProperties, BuildConfiguration buildConfiguration, Boolean ignoreCase = false)
+                => IsBuildConfiguration(compilationProperties, $"{buildConfiguration}", ignoreCase);
         }
     }
 }

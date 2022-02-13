@@ -1,22 +1,17 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace JasonPereira84.Helpers
 {
     using Newtonsoft.Json;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Session;
     using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
     using JasonPereira84.Helpers.Extensions;
 
     public class Notification
     {
-        private static String _json<T>(T t)
-            => JsonConvert.SerializeObject(t, new Newtonsoft.Json.Converters.StringEnumConverter());
-
         [DefaultValue(warning)]
         public enum TypeEnum
         {
@@ -153,7 +148,8 @@ namespace JasonPereira84.Helpers
             [JsonProperty("icon")] public String Icon { get; set; }
             [JsonProperty("message")] public String Message { get; set; }
 
-            public String ToJson() => _json(this);
+            public String AsJson()
+                => JsonConvert.SerializeObject(this, new Newtonsoft.Json.Converters.StringEnumConverter());
         }
 
         public struct settings
@@ -180,57 +176,82 @@ namespace JasonPereira84.Helpers
                         <a href=""{3}"" target=""{4}"" data-notify=""url""></a>
                     </div>";
 
-
             public settings Sanitize()
             {
                 if (AllowDismiss.IsFalse())
                 {
-                    Ensure.That<ArgumentOutOfRangeException>(Delay > 0,
-                        $"{nameof(settings.Delay)} MUST-BE greater than zero (0) when {nameof(settings.AllowDismiss)} is '{false}'");
-
+                    if (Delay == 0)
+                        throw new ArgumentOutOfRangeException(
+                            $"{nameof(settings)}.{nameof(settings.AllowDismiss)}",
+                            $"The value of '{nameof(settings)}.{nameof(settings.AllowDismiss)}' MUST-BE greater than zero (0) when {nameof(settings.AllowDismiss)} is 'false'.");
+                    
                     MouseOver = MouseOverEnum.pause;
                 }
                 return this;
             }
 
-            public String ToJson() => _json(this);
+            public String AsJson()
+                => JsonConvert.SerializeObject(this, new Newtonsoft.Json.Converters.StringEnumConverter());
         }
 
         public class DecoratorResult<TActionResult> : IActionResult
             where TActionResult : IActionResult
         {
-            public TActionResult Result { get; }
-            public Notification Notification { get; }
+            public TActionResult Result { get; private set; }
+
+            public Notification Notification { get; private set; }
 
             public DecoratorResult(TActionResult result, Notification notification)
             {
-                Result = result;
-                Notification = notification;
+                Result = result ?? throw new ArgumentNullException(nameof(result));
+                Notification = notification ?? throw new ArgumentNullException(nameof(notification));
             }
 
             public async Task ExecuteResultAsync(ActionContext actionContext)
             {
-                if (actionContext.GetTempData(out ITempDataDictionary tempData))
-                    Web.AddIfNewOrUpdate(tempData, $"{typeof(Notification).FullName}", Notification.Jsons());
+                if (actionContext == null)
+                    throw new ArgumentNullException(nameof(actionContext));
+
+                if (actionContext.HttpContext == null)
+                    throw new ArgumentNullException($"{nameof(actionContext)}.{nameof(actionContext.HttpContext)}");
+
+                var tempDataDictionaryFactory = actionContext
+                    .HttpContext
+                    .RequestServices
+                    .GetService(typeof(ITempDataDictionaryFactory)) as ITempDataDictionaryFactory;
+                if (tempDataDictionaryFactory == null)
+                    throw new ArgumentNullException($"{nameof(actionContext)}.{nameof(ITempDataDictionaryFactory)}");
+
+                var tempDataDictionary = tempDataDictionaryFactory.GetTempData(actionContext.HttpContext);
+                if (tempDataDictionary == null)
+                    throw new ArgumentNullException($"{nameof(actionContext)}.{nameof(ITempDataDictionary)}");
+
+                var key = $"{typeof(Notification).FullName}";
+                if (tempDataDictionary.NotContainsKey(key))
+                    tempDataDictionary.Add(key, Notification.Jsons());
+                else
+                    tempDataDictionary[key] = Notification.Jsons();
 
                 await Result.ExecuteResultAsync(actionContext);
             }
         }
 
         [JsonProperty("Options")]
-        public options Options { get; }
+        public options Options { get; private set; }
 
         [JsonProperty("Settings")]
-        public settings Settings { get; }
+        public settings Settings { get; private set; }
 
-        public String Jsons() => $"{Options.ToJson()}, {Settings.ToJson()}";
+        public String Jsons() 
+            => $"{Options.AsJson()}, {Settings.AsJson()}";
 
-        public String ToJson() => _json(this);
+        public String AsJson()
+                => JsonConvert.SerializeObject(this, new Newtonsoft.Json.Converters.StringEnumConverter());
 
         public Notification(options options, settings? settings = null)
         {
             Options = options;
-            Settings = settings?.Sanitize() ?? new settings() { AllowDismiss = true, Delay = 0 };
+            Settings = settings?.Sanitize() ?? new settings { AllowDismiss = true };
         }
 
         public static Notification Error(String message)
