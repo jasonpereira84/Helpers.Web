@@ -16,7 +16,7 @@ namespace JasonPereira84.Helpers
                         serviceProviderOptions.ValidateScopes = webHostBuilderContext.HostingEnvironment.IsDevelopment();
                     });
 
-            public static (IWebHost WebHost, WebHostBuilderContext WebHostBuilderContext) Build(this IWebHostBuilder webHostBuilder)
+            public static (IWebHost WebHost, WebHostBuilderContext WebHostBuilderContext) BuildWithContext(this IWebHostBuilder webHostBuilder)
             {
                 var thisValueWillOnlyBeSetAfterBuildIsInvoked = default(WebHostBuilderContext);
                 webHostBuilder.ConfigureServices(
