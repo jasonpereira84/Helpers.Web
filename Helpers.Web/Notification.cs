@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 namespace JasonPereira84.Helpers
 {
+    using Misc = Extensions.Misc;
+
     using Newtonsoft.Json;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ViewFeatures;
-
-    using JasonPereira84.Helpers.Extensions;
 
     public class Notification
     {
@@ -178,7 +178,7 @@ namespace JasonPereira84.Helpers
 
             public settings Sanitize()
             {
-                if (AllowDismiss.IsFalse())
+                if (AllowDismiss == false)
                 {
                     if (Delay == 0)
                         throw new ArgumentOutOfRangeException(
@@ -227,7 +227,7 @@ namespace JasonPereira84.Helpers
                     throw new ArgumentNullException($"{nameof(actionContext)}.{nameof(ITempDataDictionary)}");
 
                 var key = $"{typeof(Notification).FullName}";
-                if (tempDataDictionary.NotContainsKey(key))
+                if (Misc.NotContainsKey(tempDataDictionary, key))
                     tempDataDictionary.Add(key, Notification.Jsons());
                 else
                     tempDataDictionary[key] = Notification.Jsons();
