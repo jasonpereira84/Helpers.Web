@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30225.117
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers.Web", "Helpers.Web\Helpers.Web.csproj", "{68656C70-7765-6200-0000-000000737263}"
 EndProject
@@ -16,9 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{CAF8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{48460AF9-9F24-40CA-8C44-6A7F7D366752}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\develop.yml = .github\workflows\develop.yml
-		.github\workflows\master.yml = .github\workflows\master.yml
-		.github\workflows\release.yml = .github\workflows\release.yml
+		.github\workflows\build_and_publish.yml = .github\workflows\build_and_publish.yml
 	EndProjectSection
 EndProject
 Global
