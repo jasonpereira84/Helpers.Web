@@ -28,7 +28,7 @@ namespace JasonPereira84.Helpers.Web.Tests
                 }
 
                 {
-                    Assert.ThrowsException<ArgumentNullException>(
+                    Assert.Throws<ArgumentNullException>(
                         () => new HealthCheck(default(Func<HealthCheckContext, Task<HealthCheckResult>>)));
                 }
 
@@ -44,7 +44,7 @@ namespace JasonPereira84.Helpers.Web.Tests
                 }
 
                 {
-                    Assert.ThrowsException<ArgumentNullException>(
+                    Assert.Throws<ArgumentNullException>(
                         () => new HealthCheck(default(Func<HealthCheckRegistration, Task<HealthCheckResult>>)));
                 }
 
@@ -59,7 +59,7 @@ namespace JasonPereira84.Helpers.Web.Tests
                 }
 
                 {
-                    Assert.ThrowsException<ArgumentNullException>(
+                    Assert.Throws<ArgumentNullException>(
                         () => new HealthCheck(default(Task<HealthCheckResult>)));
                 }
 
@@ -149,7 +149,7 @@ namespace JasonPereira84.Helpers.Web.Tests
 
             {
 
-                Assert.ThrowsException<ArgumentNullException>(
+                Assert.Throws<ArgumentNullException>(
                     () => HealthCheck.Options.From(default(Func<HealthCheckRegistration, Boolean>)));
             }
 
@@ -170,7 +170,7 @@ namespace JasonPereira84.Helpers.Web.Tests
 
                 {
 
-                    Assert.ThrowsException<ArgumentNullException>(
+                    Assert.Throws<ArgumentNullException>(
                         () => HealthCheck.Options.JsonResponse(default(Func<HealthCheckRegistration, Boolean>)));
                 }
 
@@ -203,7 +203,9 @@ namespace JasonPereira84.Helpers.Web.Tests
 
                 var healthCheckResult = HealthCheck.Result
                     .From(healthStatus, data, description, exception);
+#pragma warning disable MSTEST0032
                 Assert.IsNotNull(healthCheckResult);
+#pragma warning restore MSTEST0032
                 Assert.IsInstanceOfType(healthCheckResult, typeof(HealthCheckResult));
                 Assert.AreEqual(
                     expected: healthStatus,
@@ -219,7 +221,7 @@ namespace JasonPereira84.Helpers.Web.Tests
 
             {
 
-                Assert.ThrowsException<ArgumentNullException>(
+                Assert.Throws<ArgumentNullException>(
                     () => HealthCheck.Result.From(HealthStatus.Degraded, default(IDictionary<String, Object>)));
             }
 

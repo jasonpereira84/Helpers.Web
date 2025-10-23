@@ -10,6 +10,7 @@ namespace JasonPereira84.Helpers
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
+#pragma warning disable CS8981
     public class Notification
     {
         [DefaultValue(warning)]
@@ -296,4 +297,5 @@ namespace JasonPereira84.Helpers
                     Timer = 1000,
                 });
     }
+#pragma warning restore CS8981
 }
