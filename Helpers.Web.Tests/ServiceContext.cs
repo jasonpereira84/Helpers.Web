@@ -37,12 +37,12 @@ namespace JasonPereira84.Helpers.Web.Tests
                 }
 
                 {
-                    Assert.ThrowsException<ArgumentException>(
+                    Assert.Throws<ArgumentException>(
                         () => new ServiceContext<Int32>(default(String), "1", 1));
                 }
 
                 {
-                    Assert.ThrowsException<ArgumentException>(
+                    Assert.Throws<ArgumentException>(
                         () => new ServiceContext<Int32>("1", default(String), 1));
                 }
 
@@ -68,12 +68,12 @@ namespace JasonPereira84.Helpers.Web.Tests
                 }
 
                 {
-                    Assert.ThrowsException<ArgumentException>(
+                    Assert.Throws<ArgumentException>(
                         () => new ServiceContext<SomeClass>(default(String), "1", new SomeClass { Value = 1 }));
                 }
 
                 {
-                    Assert.ThrowsException<ArgumentException>(
+                    Assert.Throws<ArgumentException>(
                         () => new ServiceContext<SomeClass>("1", default(String), new SomeClass { Value = 1 }));
                 }
 
@@ -99,12 +99,12 @@ namespace JasonPereira84.Helpers.Web.Tests
                 }
 
                 {
-                    Assert.ThrowsException<ArgumentException>(
+                    Assert.Throws<ArgumentException>(
                         () => new ServiceContext<IEnumerable<Int32>>(default(String), "1", new[] { 1 }));
                 }
 
                 {
-                    Assert.ThrowsException<ArgumentException>(
+                    Assert.Throws<ArgumentException>(
                         () => new ServiceContext<IEnumerable<Int32>>("1", default(String), new[] { 1 }));
                 }
 
@@ -130,12 +130,12 @@ namespace JasonPereira84.Helpers.Web.Tests
                 }
 
                 {
-                    Assert.ThrowsException<ArgumentException>(
+                    Assert.Throws<ArgumentException>(
                         () => new ServiceContext<DayOfWeek>(default(String), "1", DayOfWeek.Monday));
                 }
 
                 {
-                    Assert.ThrowsException<ArgumentException>(
+                    Assert.Throws<ArgumentException>(
                         () => new ServiceContext<DayOfWeek>("1", default(String), DayOfWeek.Monday));
                 }
 

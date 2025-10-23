@@ -28,7 +28,7 @@ namespace JasonPereira84.Helpers.Web.Tests
             {
                 var href = new PathString("/1");
 
-                Assert.ThrowsException<ArgumentNullException>(
+                Assert.Throws<ArgumentNullException>(
                     () => new NavigationItem(default(String), href));
             }
 

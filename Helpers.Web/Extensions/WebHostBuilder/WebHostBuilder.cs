@@ -6,6 +6,7 @@ namespace JasonPereira84.Helpers
     namespace Extensions
     {
         using Microsoft.AspNetCore.Hosting;
+        using Microsoft.Extensions.Hosting;
 
         public static partial class Web
         {

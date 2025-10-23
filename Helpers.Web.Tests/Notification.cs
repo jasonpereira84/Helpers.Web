@@ -17,7 +17,7 @@ namespace JasonPereira84.Helpers.Web.Tests
                 Delay = 0
             };
 
-            Assert.ThrowsException<ArgumentOutOfRangeException>(
+            Assert.Throws<ArgumentOutOfRangeException>(
                 () => settings.Sanitize());
         }
 
@@ -48,14 +48,14 @@ namespace JasonPereira84.Helpers.Web.Tests
                 var options = new Notification.options();
                 var notification = new Notification(options);
 
-                Assert.ThrowsException<ArgumentNullException>(
+                Assert.Throws<ArgumentNullException>(
                     () => new Notification.DecoratorResult<ViewResult>(default(ViewResult), notification));
             }
 
             {
                 var result = new ViewResult();
 
-                Assert.ThrowsException<ArgumentNullException>(
+                Assert.Throws<ArgumentNullException>(
                     () => new Notification.DecoratorResult<ViewResult>(result, default(Notification)));
             }
 
@@ -70,7 +70,7 @@ namespace JasonPereira84.Helpers.Web.Tests
                 var notification = new Notification(options);
                 var decoratorResult = new Notification.DecoratorResult<ViewResult>(result, notification);
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(
+                await Assert.ThrowsAsync<ArgumentNullException>(
                     () => decoratorResult.ExecuteResultAsync(default(ActionContext)));
             }
 
@@ -80,7 +80,7 @@ namespace JasonPereira84.Helpers.Web.Tests
                 var notification = new Notification(options);
                 var decoratorResult = new Notification.DecoratorResult<ViewResult>(result, notification);
 
-                await Assert.ThrowsExceptionAsync<ArgumentNullException>(
+                await Assert.ThrowsAsync<ArgumentNullException>(
                     () => decoratorResult.ExecuteResultAsync(new ActionContext()));
             }
 

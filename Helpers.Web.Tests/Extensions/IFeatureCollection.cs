@@ -22,7 +22,7 @@ namespace JasonPereira84.Helpers.Web.Tests
                 }
 
                 {
-                    Assert.ThrowsException<ArgumentNullException>(
+                    Assert.Throws<ArgumentNullException>(
                         () => Web.TryGet(default(IFeatureCollection), default(Func<IExceptionHandlerFeature, Exception>), out Exception exception));
                 }
 

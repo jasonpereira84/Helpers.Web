@@ -43,6 +43,10 @@
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+	<FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="JasonPereira84.Helpers.Configuration" Version="8.0.0" />
